@@ -2,6 +2,9 @@
 
 This repository contains an example implementation of registration, login, application login, and application registration processes using Django and OAuth 2.0.
 
+Writed by: Osvaldo Calombe
+Why: I still love and want more than a friendship with Will
+
 ## Índice
 
 1. [Introdução](#introdução)
