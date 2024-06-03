@@ -1,7 +1,3 @@
-Sure, here is a README formatted for a GitHub repository, explaining how to implement and test the registration, login, application login, and application registration processes using Django and OAuth 2.0.
-
----
-
 # Django OAuth 2.0 Example
 
 This repository contains an example implementation of registration, login, application login, and application registration processes using Django and OAuth 2.0.
@@ -387,15 +383,3 @@ Este projeto demonstra como configurar um sistema de autenticação e autorizaç
 3. Faça commit das suas mudanças (`git commit -am 'Add some fooBar'`)
 4. Faça push para a branch (`git push origin feature/fooBar`)
 5. Crie um novo Pull Request
-
----
-
-Se você tiver alguma dúvida ou problema, sinta-se à vontade para abrir uma issue neste repositório.
-
----
-
-**Próximos Passos:**
-**a.** Adicionar testes automatizados para validar os processos.
-**b.** Implementar tratamento de erros e logs detalhados para monitorar e resolver problemas rapidamente.
-
-Você gostaria de prosseguir com algum desses próximos passos?
