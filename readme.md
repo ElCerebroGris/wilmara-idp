@@ -11,50 +11,24 @@ Why: I still love and want more than a friendship with Will
 1. [Introdução](#introdução)
 2. [Instalação](#instalação)
 3. [Configuração](#configuração)
-4. [Processo de Registro](#processo-de-registro)
-5. [Processo de Login](#processo-de-login)
-6. [Login de Aplicação](#login-de-aplicação)
-7. [Registro de Aplicação](#registro-de-aplicação)
-8. [Testando o Código](#testando-o-código)
-9. [Contribuição](#contribuição)
+4. [Estrutura do Projeto](#estrutura-do-projeto)
+5. [Processo de Registro](#processo-de-registro)
+6. [Processo de Login](#processo-de-login)
+7. [Login de Aplicação](#login-de-aplicação)
+8. [Registro de Aplicação](#registro-de-aplicação)
+9. [Testando o Código](#testando-o-código)
+10. [Contribuição](#contribuição)
 
 ## Introdução
 
 Este projeto demonstra como configurar um sistema de autenticação e autorização usando Django e OAuth 2.0. Ele cobre os processos de registro e login de usuário, bem como login e registro de aplicação.
-
-## Instalação
-
-1. Clone o repositório:
-
-    ```bash
-    git clone https://github.com/yourusername/django-oauth2-example.git
-    cd django-oauth2-example
-    ```
-
-2. Crie e ative um ambiente virtual:
-
-    ```bash
-    python -m venv venv
-    source venv/bin/activate  # Para Windows use `venv\Scripts\activate`
-    ```
-
-3. Instale as dependências:
-
-    ```bash
-    pip install -r requirements.txt
-    ```
-
-4. Aplique as migrações do banco de dados:
-
-    ```bash
-    python manage.py migrate
-    ```
 
 ## Configuração
 
 1. Adicione `oauth2_provider` ao seu `INSTALLED_APPS` no `settings.py`.
 
     ```python
+    # settings.py
     INSTALLED_APPS = [
         # Outros apps
         'oauth2_provider',
@@ -64,6 +38,7 @@ Este projeto demonstra como configurar um sistema de autenticação e autorizaç
 2. Configure as URLs do OAuth 2.0 no seu projeto:
 
     ```python
+    # urls.py
     from django.urls import path, include
 
     urlpatterns = [
@@ -72,9 +47,38 @@ Este projeto demonstra como configurar um sistema de autenticação e autorizaç
     ]
     ```
 
+## Estrutura do Projeto
+
+Estrutura sugerida para o projeto Django:
+
+```
+myproject/
+    manage.py
+    myproject/
+        __init__.py
+        settings.py
+        urls.py
+        wsgi.py
+    myapp/
+        __init__.py
+        admin.py
+        apps.py
+        forms.py
+        models.py
+        tests.py
+        views.py
+        templates/
+            register.html
+            login.html
+            verification_failed.html
+            register_application.html
+            application_detail.html
+        utils.py
+```
+
 ## Processo de Registro
 
-1. Criação do Formulário de Registro:
+1. **Criação do Formulário de Registro** - `myapp/forms.py`:
 
     ```python
     from django import forms
@@ -97,7 +101,7 @@ Este projeto demonstra como configurar um sistema de autenticação e autorizaç
                 raise forms.ValidationError("As senhas não correspondem.")
     ```
 
-2. View para Registro:
+2. **View para Registro** - `myapp/views.py`:
 
     ```python
     from django.shortcuts import render, redirect
@@ -126,7 +130,7 @@ Este projeto demonstra como configurar um sistema de autenticação e autorizaç
         return render(request, 'register.html', {'form': form})
     ```
 
-3. Envio de E-mail de Verificação:
+3. **Envio de E-mail de Verificação** - `myapp/utils.py`:
 
     ```python
     from django.core.mail import send_mail
@@ -141,7 +145,7 @@ Este projeto demonstra como configurar um sistema de autenticação e autorizaç
         send_mail(subject, message, from_email, recipient_list)
     ```
 
-4. Modelo para o Token de Verificação de E-mail:
+4. **Modelo para o Token de Verificação de E-mail** - `myapp/models.py`:
 
     ```python
     from django.db import models
@@ -153,7 +157,7 @@ Este projeto demonstra como configurar um sistema de autenticação e autorizaç
         created_at = models.DateTimeField(auto_now_add=True)
     ```
 
-5. View para Verificação de E-mail:
+5. **View para Verificação de E-mail** - `myapp/views.py`:
 
     ```python
     from django.shortcuts import render, redirect
@@ -173,9 +177,14 @@ Este projeto demonstra como configurar um sistema de autenticação e autorizaç
             return render(request, 'verification_failed.html')
     ```
 
+6. **Templates**:
+
+    - `myapp/templates/register.html`
+    - `myapp/templates/verification_failed.html`
+
 ## Processo de Login
 
-1. Criação do Formulário de Login:
+1. **Criação do Formulário de Login** - `myapp/forms.py`:
 
     ```python
     from django import forms
@@ -185,7 +194,7 @@ Este projeto demonstra como configurar um sistema de autenticação e autorizaç
         password = forms.CharField(widget=forms.PasswordInput)
     ```
 
-2. View para Login:
+2. **View para Login** - `myapp/views.py`:
 
     ```python
     from django.shortcuts import render, redirect
@@ -212,9 +221,13 @@ Este projeto demonstra como configurar um sistema de autenticação e autorizaç
         return render(request, 'login.html', {'form': form})
     ```
 
+3. **Template**:
+
+    - `myapp/templates/login.html`
+
 ## Login de Aplicação
 
-1. Configuração do Cliente OAuth 2.0:
+1. **Configuração do Cliente OAuth 2.0** - `settings.py`:
 
     ```python
     INSTALLED_APPS = [
@@ -223,7 +236,7 @@ Este projeto demonstra como configurar um sistema de autenticação e autorizaç
     ]
     ```
 
-2. Configuração das URLs:
+2. **Configuração das URLs** - `urls.py`:
 
     ```python
     from django.urls import path, include
@@ -234,7 +247,7 @@ Este projeto demonstra como configurar um sistema de autenticação e autorizaç
     ]
     ```
 
-3. View para Iniciar o Login de Aplicação:
+3. **View para Iniciar o Login de Aplicação** - `myapp/views.py`:
 
     ```python
     from django.shortcuts import redirect
@@ -250,7 +263,7 @@ Este projeto demonstra como configurar um sistema de autenticação e autorizaç
         return redirect(authorization_url)
     ```
 
-4. View para Lidar com o Callback do IDP:
+4. **View para Lidar com o Callback do IDP** - `myapp/views.py`:
 
     ```python
     import requests
@@ -268,7 +281,9 @@ Este projeto demonstra como configurar um sistema de autenticação e autorizaç
 
         response = requests.post(token_url, data={
             'code': authorization_code,
-            'client_id': client_id,
+            'client_id': client
+
+_id,
             'client_secret': client_secret,
             'redirect_uri': redirect_uri,
             'grant_type': grant_type
@@ -285,9 +300,21 @@ Este projeto demonstra como configurar um sistema de autenticação e autorizaç
             return render(request, 'callback_failed.html')
     ```
 
+5. **Função para Armazenar Tokens** - `myapp/utils.py`:
+
+    ```python
+    def store_tokens(access_token, refresh_token):
+        # Implementar armazenamento seguro de tokens
+        pass
+    ```
+
+6. **Template**:
+
+    - `myapp/templates/callback_failed.html`
+
 ## Registro de Aplicação
 
-1. Criação do Modelo de Aplicação:
+1. **Criação do Modelo de Aplicação** - `myapp/models.py`:
 
     ```python
     from django.db import models
@@ -302,7 +329,7 @@ Este projeto demonstra como configurar um sistema de autenticação e autorizaç
         created_at = models.DateTimeField(auto_now_add=True)
     ```
 
-2. Criação do Formulário de Registro de Aplicação:
+2. **Criação do Formulário de Registro de Aplicação** - `myapp/forms.py`:
 
     ```python
     from django import forms
@@ -310,13 +337,11 @@ Este projeto demonstra como configurar um sistema de autenticação e autorizaç
 
     class ApplicationRegistrationForm(forms.ModelForm):
         class Meta:
-           
-
- model = Application
+            model = Application
             fields = ['name', 'redirect_uri']
     ```
 
-3. View para Registrar a Aplicação:
+3. **View para Registrar a Aplicação** - `myapp/views.py`:
 
     ```python
     from django.shortcuts import render, redirect
@@ -339,7 +364,7 @@ Este projeto demonstra como configurar um sistema de autenticação e autorizaç
         return render(request, 'register_application.html', {'form': form})
     ```
 
-4. View para Detalhar a Aplicação:
+4. **View para Detalhar a Aplicação** - `myapp/views.py`:
 
     ```python
     from django.shortcuts import render, get_object_or_404
@@ -349,6 +374,11 @@ Este projeto demonstra como configurar um sistema de autenticação e autorizaç
         application = get_object_or_404(Application, id=application_id)
         return render(request, 'application_detail.html', {'application': application})
     ```
+
+5. **Templates**:
+
+    - `myapp/templates/register_application.html`
+    - `myapp/templates/application_detail.html`
 
 ## Testando o Código
 
